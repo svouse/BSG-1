@@ -89,10 +89,4 @@ class User(object):
         return "{} {}".format(self.first_name.capitalize(), self.last_name.capitalize())
 
 if __name__ == "__main__":
-    Database.initialize()
-    for user in Database.find('users',{}):
-        user = User(**user)
-        for meeting in user.meetings:
-            if Database.find_one('meetings', {"_id": meeting}) is None:
-                user.meetings.remove(meeting)
-        user.save_to_db()
+    pass

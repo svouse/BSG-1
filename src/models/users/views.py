@@ -28,24 +28,35 @@ def view(user_id):
 @user_decorators.requires_login
 def home():
     #user = User.get_by_email(session['email'])
-    return render_template('users/dashboard.html',)
+    return render_template('') # front end template for the dashboard
 
 
 @user_blueprint.route('/profile')
 @user_decorators.requires_login
 def view_profile():
-    return render_template('users/account.html', user=User.get_by_email(session['email']))
+    return render_template('', user=User.get_by_email(session['email'])) #front end code for the profile page
 
 
 @user_blueprint.route('/profile/edit',methods=['GET','POST'])
 @user_decorators.requires_login
 def edit_profile():
-    pass
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        user_name = request.form['user_name']
 
-@user_blueprint.route('view/<string:user_id>')
-#@user_decorators.requires_department_head TODO fix department head permissions
-def view_user():
-    pass # TODO requires_department_head should work for events also
+        try:
+            if User.register_user(email, password, title, first_name, last_name, department):
+                session['email'] = email
+                return redirect(url_for("users.home"))
+        except UserErrors.UserError as e:
+            return e.message
+
+    return render_template("register.html")  # Send the user an error if their login was invalid
+
+
 
 
 

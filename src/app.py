@@ -1,35 +1,24 @@
 import jinja2
 import re
 from flask import Flask, session, jsonify
-from flask import render_template
-from flask import request
-from flask import url_for
+from flask import render_template,request,url_for
 from werkzeug.utils import redirect
 import src.models.users.errors as UserErrors
 from src.common.database import Database
-from src.models.projects.projects import Project
-from src.models.reminder.notification import Notification
+from src.models.notify.notification import Notification
 from src.models.users.users import User
-from src.models.meetings.meetings import Meeting
+from src.models.users.views import user_blueprint
 
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(
-        ['templates', 'templates/users', 'templates/meetings', 'templates/projects', 'templates/tasks',
-         'templates/department'])
+        ['templates', 'templates/users'])
 )
 
 app = Flask(__name__)
 app.secret_key = "123"
-
-from src.models.users.views import user_blueprint
-
 app.register_blueprint(user_blueprint, url_prefix="/users")
 
-
-@app.context_processor
-def priority_list():
-    return dict(priority_list=['Low', 'Normal', 'High', 'Critical'])
 
 
 @app.context_processor
@@ -69,22 +58,19 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        print(request.form)
         email = request.form['email']
         password = request.form['password']
-        title = request.form['title']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        department = request.form['department']
 
         try:
-            if User.register_user(email, password, title, first_name, last_name, department):
+            if User.register_user(email, password, first_name, last_name,user_name):
                 session['email'] = email
                 return redirect(url_for("users.home"))
         except UserErrors.UserError as e:
             return e.message
 
-    return render_template("register.html")  # Send the user an error if their login was invalid
+    return render_template("register.html")
 
 
 @app.route("/search")

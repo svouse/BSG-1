@@ -20,4 +20,15 @@ class Content:
     @staticmethod
     def get_by_creator(creator):
          Database.initialize()
-         return User(**Database.find("content", {"creator": creator}))
+         return Content(**Database.find("content", {"creator": creator}))
+
+
+    @staticmethod
+    def get_by_id(_id):
+         Database.initialize()
+         return Content(**Database.find_one("content", {"_id": _id}))
+
+    @staticmethod
+    def get_by_name(name):
+         Database.initialize()
+         return Content(**Database.find("content", {"name": name}))

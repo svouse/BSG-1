@@ -6,7 +6,7 @@ from src.models.reminder.notification import Notification
 from werkzeug.utils import redirect
 import src.models.users.decorators as user_decorators
 from src.models.users.users import User
-from src.models.reminder.notification import Event
+
 
 user_blueprint = Blueprint('users', __name__)
 
@@ -20,7 +20,7 @@ def notifications():
 
 @user_blueprint.route('/<string:user_id>')
 def view(user_id):
-    return render_template('users/profile.html', staff=User.get_by_id(user_id))
+    return render_template('users/profile.html', user=User.get_by_id(user_id))
 
 
 

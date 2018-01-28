@@ -70,7 +70,7 @@ class User(object):
         Database.update('users', {"_id": self._id}, self.json())
 
     def url(self):
-        return CONSTANTS.url + r'users/' + self._id
+        return CONSTANTS.url + r'users/' + self.user_name
 
     def __eq__(self, other):
         return self._id == other._id

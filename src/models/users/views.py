@@ -2,7 +2,6 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import url_for,session
-from src.models.reminder.notification import Notification
 from werkzeug.utils import redirect
 import src.models.users.decorators as user_decorators
 from src.models.users.users import User
